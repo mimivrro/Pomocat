@@ -15,15 +15,75 @@ body {
   align-items: center;
 }
 
+/* ...existing code...
+
+/* Paw-shaped container: draw the whole paw (white outer + pink pads) with one pseudo-element.
+   Content of the timer stays inside the paw (z-index ordering). */
+:root {
+  --paw-white: #ffffff;
+  --pad-pink: #ffd6e6;
+}
+
 .container {
+  position: relative;
+  width: 380px;
+  max-width: 90%;
+  height: 380px;
+  padding: 2.5rem 2rem;
+  margin: 0 auto;
   text-align: center;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.85);
+  background: transparent; /* paw is drawn by ::before */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* single layered pseudo-element draws the white paw outline and the pink pads */
+.container::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -48%);
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  /* order: white shapes first (back), pink pads on top */
+  background-repeat: no-repeat;
+  background-image:
+    /* white main pad */
+    radial-gradient(circle 44% at 50% 68%, var(--paw-white) 99%, transparent 100%),
+    /* white toes (4) */
+    radial-gradient(circle 18% at 22% 20%, var(--paw-white) 99%, transparent 100%),
+    radial-gradient(circle 18% at 50% 10%, var(--paw-white) 99%, transparent 100%),
+    radial-gradient(circle 18% at 78% 20%, var(--paw-white) 99%, transparent 100%),
+
+    /* pink main inner pad */
+    radial-gradient(circle 22% at 50% 66%, var(--pad-pink) 99%, transparent 100%),
+    /* pink toes (4 smaller pink circles positioned inside the white toes) */
+    radial-gradient(circle 11% at 22% 20%, var(--pad-pink) 99%, transparent 100%),
+    radial-gradient(circle 11% at 50% 10%, var(--pad-pink) 99%, transparent 100%),
+    radial-gradient(circle 11% at 78% 20%, var(--pad-pink) 99%, transparent 100%);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ensure inner content sits above the paw drawing */
+.container > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* fallback class (optional) keeps previous rounded look if needed */
+.container.fallback {
+  background: rgba(255,255,255,0.85);
   border-radius: 20px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-  max-width: 400px;
-  width: 90%;
 }
+
+/* ...existing code... */
 
 h1 {
     font-family: 'Caveat', cursive;
@@ -33,9 +93,10 @@ h1 {
 
 .cat-image {
   width: 150px;
-  height: auto;
+  height: 150px;
   margin-bottom: 1rem;
   transition: transform 0.3s;
+  border-radius: 50%;
 }
 
 .cat-image:hover {
