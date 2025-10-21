@@ -111,3 +111,87 @@ pauseBtn.addEventListener("click", pauseTimer);
 resetBtn.addEventListener("click", resetTimer);
 
 updateDisplay(); // initialize
+
+
+// ...existing code...
+
+(function () {
+  const toggle = document.getElementById('settingsToggle');
+  const sidebar = document.getElementById('settingsSidebar');
+  const overlay = document.getElementById('settingsOverlay');
+  const closeBtn = document.getElementById('settingsClose');
+  const presets = Array.from(document.querySelectorAll('.preset'));
+  const presetNameEl = document.getElementById('presetName');
+
+  function openSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.add('open');
+    sidebar.setAttribute('aria-hidden', 'false');
+    if (overlay) { overlay.hidden = false; overlay.style.opacity = '1'; }
+  }
+
+  function closeSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.remove('open');
+    sidebar.setAttribute('aria-hidden', 'true');
+    if (overlay) {
+      overlay.style.opacity = '0';
+      setTimeout(() => overlay.hidden = true, 220);
+    }
+  }
+
+  toggle?.addEventListener('click', openSidebar);
+  closeBtn?.addEventListener('click', closeSidebar);
+  overlay?.addEventListener('click', closeSidebar);
+
+  function applyPreset(workMin, breakMin, markActiveId, name) {
+    localStorage.setItem('pomodoro-work', String(workMin));
+    localStorage.setItem('pomodoro-short', String(breakMin));
+    localStorage.setItem('pomodoro-name', name || '');
+
+    clearInterval(timer);
+    isRunning = false;
+    isBreak = false;
+    timeLeft = workMin * 60;
+    updateDisplay();
+
+    if (typeof statusText !== 'undefined' && statusText) {
+      statusText.textContent = `Preset: ${workMin} / ${breakMin}`;
+    }
+    if (presetNameEl) presetNameEl.textContent = name || '';
+
+    presets.forEach(p => p.classList.remove('active'));
+    const el = document.getElementById(markActiveId);
+    if (el) el.classList.add('active');
+
+    window.dispatchEvent(new CustomEvent('pomodoro:durations-changed', {
+      detail: { work: Number(workMin), shortBreak: Number(breakMin) }
+    }));
+
+    closeSidebar();
+  }
+
+  presets.forEach(p => {
+    p.addEventListener('click', () => {
+      const name = p.dataset.name || p.textContent.trim();
+      applyPreset(Number(p.dataset.work), Number(p.dataset.break), p.id, name);
+    });
+  });
+
+  (function init() {
+    const storedWork = Number(localStorage.getItem('pomodoro-work') || 25);
+    const storedShort = Number(localStorage.getItem('pomodoro-short') || 5);
+    const storedName = localStorage.getItem('pomodoro-name') || 'Quick study sesh';
+
+    timeLeft = storedWork * 60;
+    updateDisplay();
+
+    if (typeof statusText !== 'undefined' && statusText) {
+      statusText.textContent = `Preset: ${storedWork} / ${storedShort}`;
+    }
+    if (presetNameEl) presetNameEl.textContent = storedName;
+
+    const match = presets.find(p => Number(p.dataset.work) === storedWork && Number(p.dataset.break) === storedShort);
+    if (match) match.classList.add('active');
+  })();
+})();

@@ -103,6 +103,23 @@ h1 {
   transform: scale(1.05);
 }
 
+
+
+
+.preset-name {
+  font-size: 1.1rem;
+  color: #7b294f;
+  margin: 0.6rem 0;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  /* keep it subtle and centered between image and timer */
+  text-align: center;
+  z-index: 1;
+}
+
+/* ...existing code... */
+
+
 .timer {
   font-size: 3rem;
   font-weight: bold;
@@ -136,6 +153,142 @@ h1 {
   font-size: 1.2rem;
   color: #7b294f;
 }
+
+
+/* ...existing code...
+
+/* Settings sidebar / presets */
+.settings-toggle {
+  position: fixed;
+  left: 18px;
+  top: 18px;
+  z-index: 999;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(180deg, #ffd6e6, #ffb6d1);
+  color: #4b2c3a;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.28);
+  z-index: 950;
+  transition: opacity 180ms ease;
+}
+
+/* Sidebar */
+.settings-sidebar {
+  position: fixed;
+  right: -340px;
+  top: 0;
+  height: 100%;
+  width: 320px;
+  z-index: 960;
+  background: linear-gradient(180deg, #ffffff, #fff6f9);
+  box-shadow: -12px 0 28px rgba(0,0,0,0.12);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: right 220ms ease;
+  border-left: 6px solid rgba(255,214,230,0.5);
+}
+
+/* Open state */
+.settings-sidebar.open {
+  right: 0;
+}
+
+.settings-sidebar[aria-hidden="false"] {
+  right: 0;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-header h2 {
+  font-size: 1.25rem;
+  color: #4b2c3a;
+}
+
+.settings-close {
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #7b294f;
+}
+
+.settings-body {
+  flex: 1;
+}
+
+.settings-desc {
+  color: #7b294f;
+  margin-bottom: 6px;
+}
+
+/* Preset buttons */
+.preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.preset {
+  background: linear-gradient(180deg, #ffe9f0, #ffd6e6);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 12px;
+  text-align: left;
+  color: #4b2c3a;
+  font-weight: 700;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.preset small {
+  display: block;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #7b294f;
+  margin-top: 4px;
+}
+
+.preset:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 18px rgba(0,0,0,0.12);
+}
+
+.preset.active {
+  outline: 4px solid rgba(255,182,193,0.35);
+  transform: scale(1.02);
+}
+
+/* small responsive tweak */
+@media (max-width: 420px) {
+  .settings-sidebar { width: 100%; right: -100%; }
+  .settings-sidebar.open { right: 0; }
+  .settings-toggle { left: 12px; top: 12px; }
+}
+
+/* ensure paw-inner contents stay readable above sidebar */
+.container { z-index: 10; }
+
+/* ...existing code... */
 
 :root {
   --primary-color: #ffe4e1; /* pastel pink */

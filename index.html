@@ -13,6 +13,8 @@
     <h1>Pomocat 🐾</h1>
     <img id="catImage" src="assets/cat.jpg" alt="Cute Cat" class="cat-image" />
 
+<div class="preset-name" id="presetName">Quick study sesh </div>
+
 
     <div class="timer" id="timer">25:00</div>
 
@@ -26,6 +28,41 @@
     <p class="status" id="status">Focus Time 🧠</p>
   </div>
 
-  <script src="script.js"></script>
+ 
+
+
+
+
+<button id="settingsToggle" class="settings-toggle" aria-label="Open timer presets">⏰</button>
+
+<div id="settingsOverlay" class="settings-overlay" hidden></div>
+
+<aside id="settingsSidebar" class="settings-sidebar" aria-hidden="true">
+  <header class="settings-header">
+    <h2>Timer Presets</h2>
+    <button id="settingsClose" class="settings-close" aria-label="Close">✕</button>
+  </header>
+
+  <div class="settings-body">
+    <p class="settings-desc">Choose a preset session length:</p>
+
+    <div class="preset-list">
+      <button class="preset" data-work="25" data-break="5" id="preset-quick">
+        Quick study sesh <br><small>25 / 5</small>
+      </button>
+
+      <button class="preset" data-work="50" data-break="10" id="preset-locked">
+        Locked in<br><small>50 / 10</small>
+      </button>
+
+      <button class="preset" data-work="75" data-break="15" id="preset-pro">
+        Locked in pro max<br><small>75 / 15</small>
+      </button>
+    </div>
+  </div>
+</aside>
+
+ <script src="script.js"></script>
+
 </body>
 </html>
