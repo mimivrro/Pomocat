@@ -195,3 +195,75 @@ updateDisplay(); // initialize
     if (match) match.classList.add('active');
   })();
 })();
+
+
+
+
+
+
+const taskInput = document.getElementById('taskInput');
+
+const taskList = document.getElementById('taskList');
+
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+function renderTasks() {
+  taskList.innerHTML = '';
+  tasks.forEach((task, index) => {
+    const li = document.createElement('li');
+
+    const left = document.createElement('div');
+    left.classList.add('task-left');
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.classList.add('task-checkbox');
+    checkbox.checked = task.completed;
+
+    const textSpan = document.createElement('span');
+    textSpan.classList.add('task-text');
+    textSpan.textContent = task.text;
+
+    checkbox.addEventListener('change', () => {
+      tasks[index].completed = checkbox.checked;
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderTasks();
+    });
+
+    left.appendChild(checkbox);
+    left.appendChild(textSpan);
+
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '🗑️';
+    delBtn.classList.add('delete-btn');
+    delBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      tasks.splice(index, 1);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderTasks();
+    });
+
+    li.appendChild(left);
+    li.appendChild(delBtn);
+
+    if (task.completed) li.classList.add('completed');
+    taskList.appendChild(li);
+  });
+}
+
+
+// Add new task on pressing Enter
+taskInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    const taskText = taskInput.value.trim();
+    if (taskText !== '') {
+      tasks.push({ text: taskText, completed: false });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      taskInput.value = '';
+      renderTasks();
+    }
+  }
+});
+
+
+window.addEventListener('load', renderTasks);
